@@ -1,21 +1,35 @@
-import { GET_BOOK_LIST } from '../actions/getBookList';
+import {
+  GET_BOOK_LIST_START,
+  GET_BOOK_LIST_SUCCESS,
+  GET_BOOK_LIST_FAILURE
+} from "../actions/getBookList";
 
 const initialState = {
-    // message: 'There is no books in your library!',
-    bookListArray: []
+  loading: "init",
+  bookListArray: []
 };
 
 export default function getBookList(state = initialState, action) {
-    // const bookListArray = state.bookListArray;
-    console.log('reducer', state, action);
-    console.log('action type: ', action.type);
-    switch(action.type) {
-        case GET_BOOK_LIST:
-            const newState = JSON.parse(JSON.stringify(state));
-            newState.bookListArray=action.payload.bookListArray;
-            console.log('reducer');
-            return newState;
-        default:
-            return state;
+  // const bookListArray = state.bookListArray;
+  console.log("reducer", state, action);
+  console.log("action type: ", action.type);
+  switch (action.type) {
+    case GET_BOOK_LIST_START: {
+      return { loading: "init" };
     }
+    case GET_BOOK_LIST_SUCCESS: {
+      return {
+        ...state,
+        ...action.payload
+      };
+    }
+    case GET_BOOK_LIST_FAILURE: {
+      return {
+        ...state,
+        loading: "failed"
+      };
+    }
+    default:
+      return state;
+  }
 }
