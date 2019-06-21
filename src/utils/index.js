@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as _ from 'lodash';
 
 const BASE_URL = 'https://reading-club-backend.herokuapp.com';
 
@@ -17,11 +18,21 @@ export default class HttpRequest {
     const requestUrl = HttpRequest._getRequestUrl(path);
 
     try {
-      const ret = await axios.post(requestUrl, JSON.stringify(data));
+      // const ret = await axios.post(requestUrl, JSON.stringify(data));
+      const ret = await axios({
+        method: 'POST',
+        url: requestUrl,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: '*/*',
+        },
+        data: JSON.stringify(data || {}),
+      });
       console.log('Request result ', ret);
       return ret;
     } catch (error) {
       console.error(`Request error: ${error.message}`);
+      return _.get(error, 'response', error);
     }
   }
 
@@ -37,6 +48,7 @@ export default class HttpRequest {
       return ret;
     } catch (error) {
       console.error(`Request error: ${error.message}`);
+      return _.get(error, 'response', error);
     }
   }
 
@@ -55,12 +67,13 @@ export default class HttpRequest {
           'Content-Type': 'application/json',
         },
         params: data,
-        data,
+        data: JSON.stringify(data || {}),
       });
 
       return ret;
     } catch (error) {
       console.error(`Request error: ${error.message}`);
+      return _.get(error, 'response', error);
     }
   }
 }
